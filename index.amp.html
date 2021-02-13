@@ -6,7 +6,7 @@
     <title>Womp Challenge</title>
     <link
       rel="shortcut icon"
-      href="https://www.domjparker.com"
+      href=""
     />
     <meta
       name="viewport"
@@ -101,17 +101,17 @@
 
   <body>
     <amp-state id="filmNameState">
-      <script type="application/json">
-        {
-          "items": [{"id": 1, "img": "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg"}, {"id": 2}, {"id": 3}]
-        }
-      </script>
-      <amp-script>
-        console.log(filmNameState)
-      </amp-script>
     </amp-state>
 
-    <header class="headerbar">
+    <amp-state id="filmInfoState" [src]="'https://www.omdbapi.com/?t=' + filmNameState + '&apikey=c2f9b89f'">
+      <script type="application/json">
+        {
+          "items": []
+        }
+      </script>
+    </amp-state>
+
+        <header class="headerbar">
       <h1>
         OMDB
       </h1>
@@ -128,39 +128,42 @@
             id="search-Input"
             placeholder="Enter your Movie"
             name="Search"
-            on="input-throttled:AMP.setState({filmNameState: {
-                title: event.name,
-                url: 'https://www.omdbapi.com/?t=' + event.value + '&apikey=c2f9b89f'
-                }
-                })"
+            on="input-debounced:AMP.setState({filmNameState: event.value})"
           />
         </div>
-
-        <p [text]="filmNameState['title']"></p>
         
-        <amp-list
-          binding="refresh"
-          layout="fixed-height"
-          src="amp-state:filmNameState"
-          width="auto"
-          height="600"
-          items
-        >
-          <template type="amp-mustache">
-            <div class="film-item">
-              <amp-img
-                src="{{img}}"
-                width="412"
-                height="309"
-                layout="fixed"
-              ></amp-img>
-              <h2>
-                {{id}}
-              </h2>
-            </div>
-          </template>
-        </amp-list>
-      </div>
+        <div>
+          <amp-list
+          id="UsersAmpList"
+            binding="no"
+            reset-on-refresh
+            layout="fixed-height"
+            [src]="filmInfoState"
+            width="auto"
+            height="600"
+            single-item
+          >
+            <template type="amp-mustache">
+              <amp-img 
+                src="{{Poster}}"
+                width="200"
+                height="300"
+                layout="responsive"
+                alt="{{Title}} Poster">
+              </amp-img>
+
+              <div class="user-item">
+                <h2>
+                  {{Title}}
+                </h2>
+                <p>{{Year}}</p>
+                <p>{{Director}}</p>
+                <p>{{Actors}}</p>
+              </div>
+            </template>
+          </amp-list>
+
+        </div>
     </main>
   </body>
 </html>
