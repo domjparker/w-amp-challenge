@@ -155,7 +155,7 @@
         border: rgb(84, 84, 84) solid 1px;
       }
 
-      .filmInfoCard {
+      .filmListCard {
         margin: 10px;
       }
 
@@ -222,7 +222,7 @@
 
       <div>
         <amp-list
-          id="UsersAmpList"
+          id="filmSearchAmpList"
           binding="refresh"
           reset-on-refresh
           layout="fixed-height"
@@ -232,7 +232,7 @@
           items="."
         >
           <template type="amp-mustache">
-            <div class="filmInfoCard">
+            <div class="filmListCard">
               <!-- {{#Search}} -->
               <div class="fixed-container">
                 <amp-img
@@ -243,15 +243,14 @@
                 >
                 </amp-img>
               </div>
+              <h2>{{Title}}</h2>
               <amp-accordion id="accordianFilmDetails" animate>
                 <section>
-                  <h2>{{Title}} ({{Year}})</h2>
-                  <div>
-                    <p>{{Year}}</p>
-                  </div>
+                  <h3>Year Released (accordion example)</h3>
+                    <h3>{{Year}}</h3>
                 </section>
               </amp-accordion>
-              
+              <button>More Details</button>
               
               
               <!-- <button type="button"
