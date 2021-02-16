@@ -100,8 +100,11 @@
       custom-element="amp-sidebar"
       src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"
     ></script>
-    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
-
+    <script
+      async
+      custom-element="amp-accordion"
+      src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"
+    ></script>
 
     <style amp-custom>
       body {
@@ -114,7 +117,6 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: center;
         background-color: black;
         position: fixed;
         top: 0;
@@ -124,8 +126,21 @@
         z-index: 10;
       }
 
+      #sidebar-trigger-div {
+        color: white;
+        font-size: large;
+        margin-left: 10px;
+      }
+
+      .sidebar {
+        background-color: rgb(255, 253, 243);
+        padding: 3.5rem 1.5rem 0 1.5rem;
+        width: 100vw;
+        margin-left: 0;
+      }
+
       .headerBar #siteNameDiv {
-        justify-content: center;
+        margin: 10px;
       }
 
       .headerBar #siteNameDiv #siteName {
@@ -136,17 +151,16 @@
         font-size: large;
       }
 
-      #searchInputDiv {
-        display: flex;
-        justify-items: center;
-        margin-top: 12vh;
+      .headerBar #searchInputDiv {
+        margin-left: auto;
+        /* margin-right: 10px; */
       }
 
-      #searchInput {
-        height: 50px;
-        width: 100%;
-        font-size: 20pt;
-        margin: 0px 5vw;
+      .headerBar #searchInput {
+        /* height: 50px; */
+        /* width: 100%; */
+        font-size: 13pt;
+        margin: 0px 10px;
       }
 
       .filmInfoCardContainer {
@@ -156,6 +170,7 @@
       }
 
       .filmListCard {
+        padding-top: 14vh;
         margin: 10px;
       }
 
@@ -168,14 +183,6 @@
       amp-img.contain img {
         object-fit: contain;
       }
-
-      /* .sidebar {
-        background-color: rgb(255, 253, 243);
-        padding: 3.5rem 1.5rem 0 1.5rem;
-        width: 100vw;
-        margin-left: 0;
-      } */
-
     </style>
   </head>
 
@@ -204,12 +211,18 @@
     </amp-state> -->
 
     <header class="headerBar" amp-fx="float-in-top">
-      <div id="siteNameDiv">
+      
+        <div
+          role="button"
+          on="tap:AMP.setState({moreDetailsFilmState: ({{imdbID}})});tap:more-details-sidebar.toggle"
+          tabindex="0"
+          id="sidebar-trigger-div"
+        >
+          ☰
+        </div>
+        <div id="siteNameDiv">
         <h1 id="siteName">OMDb</h1>
       </div>
-    </header>
-
-    <main>
       <div id="searchInputDiv">
         <input
           id="searchInput"
@@ -219,52 +232,9 @@
           on="input-debounced:AMP.setState({searchInputState: event.value})"
         />
       </div>
+    </header>
 
-      <div>
-        <amp-list
-          id="filmSearchAmpList"
-          binding="refresh"
-          reset-on-refresh
-          layout="fixed-height"
-          [src]="searchDataState"
-          width="auto"
-          height="600"
-          items="."
-        >
-          <template type="amp-mustache">
-            <div class="filmListCard">
-              <!-- {{#Search}} -->
-              <div class="fixed-container">
-                <amp-img
-                  class="contain"
-                  src="{{Poster}}"
-                  layout="fill"
-                  alt="{{Title}} Poster"
-                >
-                </amp-img>
-              </div>
-              <h2>{{Title}}</h2>
-              <amp-accordion id="accordianFilmDetails" animate>
-                <section>
-                  <h3>Year Released (accordion example)</h3>
-                    <h3>{{Year}}</h3>
-                </section>
-              </amp-accordion>
-              <button>More Details</button>
-              
-              
-              <!-- <button type="button"
-              on="tap:AMP.setState({moreDetailsFilmState: ({{imdbID}})});tap:more-details-sidebar.toggle"
-              tabindex="0"
-              class="sidebar-trigger">More Details</button> -->
-              <br />
-              <hr />
-              <!-- {{/Search}} -->
-            </div>
-          </template>
-        </amp-list>
-
-        <!-- <amp-sidebar
+    <amp-sidebar
           id="more-details-sidebar"
           class="sidebar"
           layout="nodisplay"
@@ -293,8 +263,55 @@
           <h3 [text]="moreDetailsDataState.Plot"></h3>
           <h3 [text]="moreDetailsDataState.Year"></h3>
           <h3 [text]="moreDetailsDataState.Year"></h3>
-        </amp-sidebar> -->
+        </amp-sidebar>
+
+    <main>
+
+      <div>
+        <amp-list
+          id="filmSearchAmpList"
+          binding="refresh"
+          reset-on-refresh
+          layout="fixed-height"
+          [src]="searchDataState"
+          width="auto"
+          height="600"
+          items="."
+        >
+          <template id="filmListTemplate" type="amp-mustache">
+            <div class="filmListCard">
+              <!-- {{#Search}} -->
+              <div class="fixed-container">
+                <amp-img
+                  class="contain"
+                  src="{{Poster}}"
+                  layout="fill"
+                  alt="{{Title}} Poster"
+                >
+                </amp-img>
+              </div>
+              <h2>{{Title}}</h2>
+              <amp-accordion id="accordianFilmDetails" animate>
+                <section>
+                  <h3>More Details (accordion example)</h3>
+                  <div>
+                    <p><strong>Year:</strong> {{Year}}</p>
+                    <p><strong>Type:</strong> {{Type}}</p>
+                  </div>
+                </section>
+              </amp-accordion>
+              <button class="moreDetailsBtn" on="tap:filmListTemplate.hide">
+                Even more details (hide/show example)
+              </button>
+
+              <br />
+              <hr />
+              <!-- {{/Search}} -->
+            </div>
+          </template>
+        </amp-list>
       </div>
+
     </main>
   </body>
 </html>
