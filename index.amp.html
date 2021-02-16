@@ -132,7 +132,7 @@
         margin-left: 10px;
       }
 
-      .sidebar {
+      #sidebar {
         background-color: rgb(255, 253, 243);
         padding: 3.5rem 1.5rem 0 1.5rem;
         width: 100vw;
@@ -200,27 +200,18 @@
       </script>
     </amp-state>
 
-    <!-- <amp-state id="moreDetailsFilmState"></amp-state>
-    <amp-state
-      id="moreDetailsDataState"
-      [src]="'https://www.omdbapi.com/?i=' + moreDetailsFilmState + '&apikey=c2f9b89f'"
-    >
-      <script type="application/json">
-        {}
-      </script>
-    </amp-state> -->
+    <amp-state id="searchTitleState"></amp-state>
 
     <header class="headerBar" amp-fx="float-in-top">
-      
-        <div
-          role="button"
-          on="tap:AMP.setState({moreDetailsFilmState: ({{imdbID}})});tap:more-details-sidebar.toggle"
-          tabindex="0"
-          id="sidebar-trigger-div"
-        >
-          ☰
-        </div>
-        <div id="siteNameDiv">
+      <div
+        role="button"
+        on="tap:tap:more-details-sidebar.toggle"
+        tabindex="0"
+        id="sidebar-trigger-div"
+      >
+        ☰
+      </div>
+      <div id="siteNameDiv">
         <h1 id="siteName">OMDb</h1>
       </div>
       <div id="searchInputDiv">
@@ -235,39 +226,61 @@
     </header>
 
     <amp-sidebar
-          id="more-details-sidebar"
-          class="sidebar"
-          layout="nodisplay"
-          side="left"
+      id="sidebar"
+      layout="nodisplay"
+      side="left"
+    >
+      <div
+        role="button"
+        on="tap:more-details-sidebar.toggle"
+        tabindex="0"
+        class="sidebar-trigger"
+      >
+        ✕
+      </div>
+      <div class="fixed-container">
+        <amp-img
+          class="contain"
+          src="https://www.taemana.com/wp-content/uploads/2017/09/team-placeholder.png"
+          [src]="moreDetailsDataState.Poster"
+          layout="fill"
+          alt="{{Title}} Poster"
         >
-          <div
-            role="button"
-            on="tap:more-details-sidebar.toggle"
-            tabindex="0"
-            class="sidebar-trigger"
-          >
-            ✕
-          </div>
-          <div class="fixed-container">
-            <amp-img
-              class="contain"
-              src="https://www.taemana.com/wp-content/uploads/2017/09/team-placeholder.png"
-              [src]="moreDetailsDataState.Poster"
-              layout="fill"
-              alt="{{Title}} Poster"
-            >
-            </amp-img>
-          </div>
-          <h2 [text]="moreDetailsDataState.Title"></h2>
-          <h3 [text]="moreDetailsDataState.Year"></h3>
-          <h3 [text]="moreDetailsDataState.Plot"></h3>
-          <h3 [text]="moreDetailsDataState.Year"></h3>
-          <h3 [text]="moreDetailsDataState.Year"></h3>
-        </amp-sidebar>
+        </amp-img>
+      </div>
+      <h2 [text]="moreDetailsDataState.Title"></h2>
+    </amp-sidebar>
 
     <main>
-
       <div>
+        <!-- <amp-list
+          id="filmTitleAmpList"
+          binding="refresh"
+          reset-on-refresh
+          layout="nodisplay"
+          [src]="'https://www.omdbapi.com/?i=' + searchTitleState + '&apikey=c2f9b89f'"
+          width="auto"
+          height="600"
+          single-item
+        >
+        <template id="moreDetailsTemplate" type="amp-mustache">
+          <div class="filmListCard">
+            <div class="fixed-container">
+              <amp-img
+                class="contain"
+                src="{{Poster}}"
+                layout="fill"
+                alt="{{Title}} Poster"
+              >
+              </amp-img>
+            </div>
+            <h2>{{Title}} ({{Year}})</h2>
+            <p>{{Director}}</p>
+            <p>{{Actors}}</p>
+            <p>{{Plot}}</p>
+          </div>
+        </amp-list> -->
+
         <amp-list
           id="filmSearchAmpList"
           binding="refresh"
@@ -300,18 +313,17 @@
                   </div>
                 </section>
               </amp-accordion>
-              <button class="moreDetailsBtn" on="tap:filmListTemplate.hide">
+              <br>
+              <button class="moreDetailsBtn" on="tap:AMP.setState({searchTitleState: {{imdbID}}});filmTitleAmpList.show">
                 Even more details (hide/show example)
               </button>
 
-              <br />
               <hr />
               <!-- {{/Search}} -->
             </div>
           </template>
         </amp-list>
       </div>
-
     </main>
   </body>
 </html>
