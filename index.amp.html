@@ -100,6 +100,8 @@
       custom-element="amp-sidebar"
       src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"
     ></script>
+    <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+
 
     <style amp-custom>
       body {
@@ -167,12 +169,12 @@
         object-fit: contain;
       }
 
-      .sidebar {
+      /* .sidebar {
         background-color: rgb(255, 253, 243);
         padding: 3.5rem 1.5rem 0 1.5rem;
         width: 100vw;
         margin-left: 0;
-      }
+      } */
 
     </style>
   </head>
@@ -191,7 +193,7 @@
       </script>
     </amp-state>
 
-    <amp-state id="moreDetailsFilmState"></amp-state>
+    <!-- <amp-state id="moreDetailsFilmState"></amp-state>
     <amp-state
       id="moreDetailsDataState"
       [src]="'https://www.omdbapi.com/?i=' + moreDetailsFilmState + '&apikey=c2f9b89f'"
@@ -199,7 +201,7 @@
       <script type="application/json">
         {}
       </script>
-    </amp-state>
+    </amp-state> -->
 
     <header class="headerBar" amp-fx="float-in-top">
       <div id="siteNameDiv">
@@ -230,10 +232,8 @@
           items="."
         >
           <template type="amp-mustache">
-            <div class="filmInfoCard" role="button">
+            <div class="filmInfoCard">
               <!-- {{#Search}} -->
-              <h2>{{Title}} ({{Year}})</h2>
-              <h3>{{Plot}}</h3>
               <div class="fixed-container">
                 <amp-img
                   class="contain"
@@ -243,10 +243,19 @@
                 >
                 </amp-img>
               </div>
-              <button type="button"
+              <amp-accordion id="accordianFilmDetails" animate>
+                <section>
+                  <h2>{{Title}} ({{Year}})</h2>
+                  <p>{{Plot}}</p>
+                </section>
+              </amp-accordion>
+              
+              
+              
+              <!-- <button type="button"
               on="tap:AMP.setState({moreDetailsFilmState: ({{imdbID}})});tap:more-details-sidebar.toggle"
               tabindex="0"
-              class="sidebar-trigger">More Details</button>
+              class="sidebar-trigger">More Details</button> -->
               <br />
               <hr />
               <!-- {{/Search}} -->
@@ -254,7 +263,7 @@
           </template>
         </amp-list>
 
-        <amp-sidebar
+        <!-- <amp-sidebar
           id="more-details-sidebar"
           class="sidebar"
           layout="nodisplay"
@@ -283,7 +292,7 @@
           <h3 [text]="moreDetailsDataState.Plot"></h3>
           <h3 [text]="moreDetailsDataState.Year"></h3>
           <h3 [text]="moreDetailsDataState.Year"></h3>
-        </amp-sidebar>
+        </amp-sidebar> -->
       </div>
     </main>
   </body>
